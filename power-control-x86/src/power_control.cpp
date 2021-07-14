@@ -2559,7 +2559,7 @@ int main(int argc, char* argv[])
     // Initialize the power state
     powerState = PowerState::off;
     // Check power good
-    if (powerOutName > 0)
+    if (psPowerOKLine.get_value() > 0)
     {
         powerState = PowerState::on;
     }
