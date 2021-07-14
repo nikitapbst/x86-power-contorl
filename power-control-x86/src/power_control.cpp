@@ -85,6 +85,8 @@ const static constexpr std::string_view powerStateFile = "power-state";
 static bool nmiEnabled = true;
 static bool sioEnabled = true;
 
+static bool pwrOnOff = true; 
+
 // Timers
 // Time holding GPIOs asserted
 static boost::asio::steady_timer gpioAssertTimer(io);
@@ -127,6 +129,7 @@ static boost::asio::posix::stream_descriptor postCompleteEvent(io);
 static gpiod::line nmiOutLine;
 
 static constexpr uint8_t beepPowerFail = 8;
+
 
 static void beep(const uint8_t& beepPriority)
 {
@@ -1132,11 +1135,13 @@ static int setGPIOOutputForMs(const std::string& name, const int value,
 static void powerOn()
 {
     setGPIOOutputForMs(power_control::powerOutName, 0, powerPulseTimeMs);
+    pwrOnOff = true;
 }
 
 static void gracefulPowerOff()
 {
     setGPIOOutputForMs(power_control::powerOutName, 0, powerPulseTimeMs);
+    pwrOnOff = false;
 }
 
 static void forcePowerOff()
@@ -2543,7 +2548,7 @@ int main(int argc, char* argv[])
 
     // Initialize POWER_OUT and RESET_OUT GPIO.
     gpiod::line line;
-    /*if (!setGPIOOutput(powerOutName, 1, line))
+    if (!setGPIOOutput(powerOutName, 1, line))
     {
         return -1;
     }
@@ -2552,14 +2557,14 @@ int main(int argc, char* argv[])
     {
         return -1;
     }
-    */
+    
     // Release line
     line.reset();
 
     // Initialize the power state
     powerState = PowerState::off;
     // Check power good
-    if (psPowerOKLine.get_value() > 0)
+    if (pwrOnOff == true)
     {
         powerState = PowerState::on;
     }
