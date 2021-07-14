@@ -2543,7 +2543,7 @@ int main(int argc, char* argv[])
 
     // Initialize POWER_OUT and RESET_OUT GPIO.
     gpiod::line line;
-    if (!setGPIOOutput(powerOutName, 1, line))
+    /*if (!setGPIOOutput(powerOutName, 1, line))
     {
         return -1;
     }
@@ -2552,14 +2552,14 @@ int main(int argc, char* argv[])
     {
         return -1;
     }
-
+    */
     // Release line
     line.reset();
 
     // Initialize the power state
     powerState = PowerState::off;
     // Check power good
-    if (psPowerOKLine.get_value() > 0)
+    if (powerOutName > 0)
     {
         powerState = PowerState::on;
     }
