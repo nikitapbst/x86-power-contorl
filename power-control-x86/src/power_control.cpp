@@ -85,8 +85,6 @@ const static constexpr std::string_view powerStateFile = "power-state";
 static bool nmiEnabled = true;
 static bool sioEnabled = true;
 
-static bool pwrOnOff = true; 
-
 // Timers
 // Time holding GPIOs asserted
 static boost::asio::steady_timer gpioAssertTimer(io);
@@ -1069,7 +1067,7 @@ static int setMaskedGPIOOutputForMs(gpiod::line& maskedGPIOLine,
     gpioAssertTimer.async_wait([maskedGPIOLine, value,
                                 name](const boost::system::error_code ec) {
         // Set the masked GPIO line back to the opposite value
-        maskedGPIOLine.set_value(!value);
+        //maskedGPIOLine.set_value(!value);
         std::string logMsg = name + " released";
         phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
         if (ec)
@@ -1135,13 +1133,11 @@ static int setGPIOOutputForMs(const std::string& name, const int value,
 static void powerOn()
 {
     setGPIOOutputForMs(power_control::powerOutName, 0, powerPulseTimeMs);
-    pwrOnOff = true;
 }
 
 static void gracefulPowerOff()
 {
     setGPIOOutputForMs(power_control::powerOutName, 0, powerPulseTimeMs);
-    pwrOnOff = false;
 }
 
 static void forcePowerOff()
@@ -2564,7 +2560,7 @@ int main(int argc, char* argv[])
     // Initialize the power state
     powerState = PowerState::off;
     // Check power good
-    if (pwrOnOff == true)
+    if (psPowerOKLine.get_value() > 0)
     {
         powerState = PowerState::on;
     }
