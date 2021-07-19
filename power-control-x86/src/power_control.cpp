@@ -1072,7 +1072,7 @@ static int setMaskedGPIOOutputForMs(gpiod::line& maskedGPIOLine,
     gpioAssertTimer.async_wait([maskedGPIOLine, value,
                                 name](const boost::system::error_code ec) {
         // Set the masked GPIO line back to the opposite value
-        //maskedGPIOLine.set_value(!value);
+        maskedGPIOLine.set_value(!value);
         std::string logMsg = name + " released";
         phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
         if (ec)
