@@ -1096,7 +1096,7 @@ static int setGPIOOutputForMs(const std::string& name, const int value,
                               const int durationMs)
 {
     // If the requested GPIO is masked, use the mask line to set the output
-    if (powerButtonMask && name == power_control::powerOutName)
+    /*if (powerButtonMask && name == power_control::powerOutName)
     {
 
         std::string logMsg1 = "1096 in setGPIOOutputForMs (return if powerOutName)";
@@ -1112,7 +1112,7 @@ static int setGPIOOutputForMs(const std::string& name, const int value,
         return setMaskedGPIOOutputForMs(resetButtonMask, name, value,
                                         durationMs);
     }
-
+    */
     
     // No mask set, so request and set the GPIO normally
     gpiod::line gpioLine;
