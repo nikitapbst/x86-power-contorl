@@ -1519,15 +1519,13 @@ static void powerStateOn(const Event event)
     switch (event)
     {
         case Event::psPowerOKDeAssert:
-            std::string logMsg = "1517 case1 powerStateOn";
             phosphor::logging::log<phosphor::logging::level::INFO>("1517 case1 powerStateOn");
             setPowerState(PowerState::off);
             // DC power is unexpectedly lost, beep
             beep(beepPowerFail);
             break;
         case Event::sioS5Assert:
-            std::string logMsg = "1524 case2 powerStateOn";
-            phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
+            phosphor::logging::log<phosphor::logging::level::INFO>("1524 case2 powerStateOn");
             setPowerState(PowerState::transitionToOff);
             addRestartCause(RestartCause::softReset);
             break;
@@ -1539,45 +1537,38 @@ static void powerStateOn(const Event event)
             setPowerState(PowerState::checkForWarmReset);
             addRestartCause(RestartCause::softReset);
             warmResetCheckTimerStart();
-            std::string logMsg = "1537 case3 powerStateOn";
-            phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
+            phosphor::logging::log<phosphor::logging::level::INFO>("1537 case3 powerStateOn");
             break;
         case Event::powerButtonPressed:
             setPowerState(PowerState::gracefulTransitionToOff);
             gracefulPowerOffTimerStart();
-            std::string logMsg = "1524 case4 powerStateOn";
-            phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
+            phosphor::logging::log<phosphor::logging::level::INFO>("1524 case4 powerStateOn");
             break;
         case Event::powerOffRequest:
             setPowerState(PowerState::transitionToOff);
             forcePowerOff();
-            std::string logMsg = "1549 case5 powerStateOn";
-            phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
+            phosphor::logging::log<phosphor::logging::level::INFO>("1549 case5 powerStateOn");
             break;
         case Event::gracefulPowerOffRequest:
             setPowerState(PowerState::gracefulTransitionToOff);
             gracefulPowerOffTimerStart();
             gracefulPowerOff();
-            std::string logMsg = "1556 case6 powerStateOn";
-            phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
+            phosphor::logging::log<phosphor::logging::level::INFO>("1556 case6 powerStateOn");
             break;
         case Event::powerCycleRequest:
             setPowerState(PowerState::transitionToCycleOff);
             forcePowerOff();
-            std::string logMsg = "1562 case7 powerStateOn";
-            phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
+            phosphor::logging::log<phosphor::logging::level::INFO>("1562 case7 powerStateOn");
             break;
         case Event::gracefulPowerCycleRequest:
             setPowerState(PowerState::gracefulTransitionToCycleOff);
             gracefulPowerOffTimerStart();
             gracefulPowerOff();
-            std::string logMsg = "1569 case8 powerStateOn";
-            phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
+            phosphor::logging::log<phosphor::logging::level::INFO>("1569 case8 powerStateOn");
             break;
         case Event::resetRequest:
             reset();
-            std::string logMsg = "1574 case9 powerStateOn";
-            phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
+            phosphor::logging::log<phosphor::logging::level::INFO>("1574 case9 powerStateOn");
             break;
         default:
             phosphor::logging::log<phosphor::logging::level::INFO>(
