@@ -84,6 +84,7 @@ const static constexpr std::string_view powerStateFile = "power-state";
 
 static bool nmiEnabled = true;
 static bool sioEnabled = true;
+static bool checkpwrOnOff = true;
 
 // Timers
 // Time holding GPIOs asserted
@@ -1147,6 +1148,7 @@ static int setGPIOOutputForMs(const std::string& name, const int value,
 static void powerOn()
 {
     std::string logMsg = "1144 powerOn()";
+    checkpwrOnOff = true;
     phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
     setGPIOOutputForMs(power_control::powerOutName, 0, powerPulseTimeMs);
 }
@@ -1154,6 +1156,7 @@ static void powerOn()
 static void gracefulPowerOff()
 {
     std::string logMsg = "1151 gracefulPowerOff()";
+    checkpwrOnOff = false;
     phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
     setGPIOOutputForMs(power_control::powerOutName, 0, powerPulseTimeMs);
 }
@@ -1163,7 +1166,9 @@ static void forcePowerOff()
     if (setGPIOOutputForMs(power_control::powerOutName, 0,
                            forceOffPulseTimeMs) < 0)
     {
+
         std::string logMsg = "1161 forcePowerOff()";
+        checkpwrOnOff = false;
         phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
         return;
     }
@@ -1519,13 +1524,13 @@ static void powerStateOn(const Event event)
     switch (event)
     {
         case Event::psPowerOKDeAssert:
-            phosphor::logging::log<phosphor::logging::level::INFO>("1517 case1 powerStateOn");
+            phosphor::logging::log<phosphor::logging::level::INFO>("1517 case1 ");
             setPowerState(PowerState::off);
             // DC power is unexpectedly lost, beep
             beep(beepPowerFail);
             break;
         case Event::sioS5Assert:
-            phosphor::logging::log<phosphor::logging::level::INFO>("1524 case2 powerStateOn");
+            phosphor::logging::log<phosphor::logging::level::INFO>("1524 case2 ");
             setPowerState(PowerState::transitionToOff);
             addRestartCause(RestartCause::softReset);
             break;
@@ -1537,38 +1542,38 @@ static void powerStateOn(const Event event)
             setPowerState(PowerState::checkForWarmReset);
             addRestartCause(RestartCause::softReset);
             warmResetCheckTimerStart();
-            phosphor::logging::log<phosphor::logging::level::INFO>("1537 case3 powerStateOn");
+            phosphor::logging::log<phosphor::logging::level::INFO>("1537 case3 ");
             break;
         case Event::powerButtonPressed:
             setPowerState(PowerState::gracefulTransitionToOff);
             gracefulPowerOffTimerStart();
-            phosphor::logging::log<phosphor::logging::level::INFO>("1524 case4 powerStateOn");
+            phosphor::logging::log<phosphor::logging::level::INFO>("1524 case4 ");
             break;
         case Event::powerOffRequest:
             setPowerState(PowerState::transitionToOff);
             forcePowerOff();
-            phosphor::logging::log<phosphor::logging::level::INFO>("1549 case5 powerStateOn");
+            phosphor::logging::log<phosphor::logging::level::INFO>("1549 case5 ");
             break;
         case Event::gracefulPowerOffRequest:
             setPowerState(PowerState::gracefulTransitionToOff);
             gracefulPowerOffTimerStart();
             gracefulPowerOff();
-            phosphor::logging::log<phosphor::logging::level::INFO>("1556 case6 powerStateOn");
+            phosphor::logging::log<phosphor::logging::level::INFO>("1556 case6 ");
             break;
         case Event::powerCycleRequest:
             setPowerState(PowerState::transitionToCycleOff);
             forcePowerOff();
-            phosphor::logging::log<phosphor::logging::level::INFO>("1562 case7 powerStateOn");
+            phosphor::logging::log<phosphor::logging::level::INFO>("1562 case7 ");
             break;
         case Event::gracefulPowerCycleRequest:
             setPowerState(PowerState::gracefulTransitionToCycleOff);
             gracefulPowerOffTimerStart();
             gracefulPowerOff();
-            phosphor::logging::log<phosphor::logging::level::INFO>("1569 case8 powerStateOn");
+            phosphor::logging::log<phosphor::logging::level::INFO>("1569 case8 ");
             break;
         case Event::resetRequest:
             reset();
-            phosphor::logging::log<phosphor::logging::level::INFO>("1574 case9 powerStateOn");
+            phosphor::logging::log<phosphor::logging::level::INFO>("1574 case9 ");
             break;
         default:
             phosphor::logging::log<phosphor::logging::level::INFO>(
@@ -2650,7 +2655,7 @@ int main(int argc, char* argv[])
     // Initialize the power state
     powerState = PowerState::off;
     // Check power good
-    if (psPowerOKLine.get_value() > 0)
+    if (checkpwrOnOff == true)
     {
 
         std::string logMsg = "2588 main Check power good";
@@ -3083,7 +3088,11 @@ int main(int argc, char* argv[])
     restartCauseIface->register_property(
         "RestartCause",
         std::string("xyz.openbmc_project.State.Host.RestartCause.Unknown"));
+
+
     phosphor::logging::log<phosphor::logging::level::INFO>("3090");
+    
+    
     restartCauseIface->register_property(
         "RequestedRestartCause",
         std::string("xyz.openbmc_project.State.Host.RestartCause.Unknown"),
