@@ -1520,7 +1520,7 @@ static void powerStateOn(const Event event)
     {
         case Event::psPowerOKDeAssert:
             std::string logMsg = "1517 case1 powerStateOn";
-            phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
+            phosphor::logging::log<phosphor::logging::level::INFO>("1517 case1 powerStateOn");
             setPowerState(PowerState::off);
             // DC power is unexpectedly lost, beep
             beep(beepPowerFail);
