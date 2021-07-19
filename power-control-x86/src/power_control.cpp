@@ -1705,9 +1705,10 @@ static void powerStateTransitionToOff(const Event event)
         case Event::psPowerOKDeAssert:
             // Cancel any GPIO assertions held during the transition
             gpioAssertTimer.cancel();
-            setPowerState(PowerState::on);
+            //setPowerState(PowerState::on);
             break;
         default:
+            setPowerState(PowerState::on);
             phosphor::logging::log<phosphor::logging::level::INFO>(
                 "No action 1702 taken.");
             break;
