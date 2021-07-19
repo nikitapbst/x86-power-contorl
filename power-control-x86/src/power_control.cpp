@@ -1126,7 +1126,7 @@ static int setGPIOOutputForMs(const std::string& name, const int value,
     gpioAssertTimer.async_wait([gpioLine, value,
                                 name](const boost::system::error_code ec) {
         // Set the GPIO line back to the opposite value
-        gpioLine.set_value(!value);
+        //gpioLine.set_value(!value);
         std::string logMsg = name + "1124 released";
         phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
         if (ec)
