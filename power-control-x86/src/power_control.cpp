@@ -1046,6 +1046,7 @@ static bool setGPIOOutput(const std::string& name, const int value,
     // Request GPIO output to specified value
     try
     {
+        phosphor::logging::log<phosphor::logging::level::INFO>("1049");
         gpioLine.request({__FUNCTION__, gpiod::line_request::DIRECTION_OUTPUT},
                          value);
     }
@@ -1127,7 +1128,7 @@ static int setGPIOOutputForMs(const std::string& name, const int value,
     gpioAssertTimer.async_wait([gpioLine, value,
                                 name](const boost::system::error_code ec) {
         // Set the GPIO line back to the opposite value
-        gpioLine.set_value(!value);
+        //gpioLine.set_value(!value);
         std::string logMsg = name + "1124 released";
         phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
         if (ec)
@@ -1163,8 +1164,14 @@ static void gracefulPowerOff()
 }
 
 static void forcePowerOff()
-{
-    if (setGPIOOutputForMs(power_control::powerOutName, 0,
+{   
+    checkpwrOnOff = false;
+    phosphor::logging::log<phosphor::logging::level::INFO>("1168 forcePowerOff()");
+    setGPIOOutputForMs(power_control::powerOutName, 0, powerPulseTimeMs);
+
+
+
+    /*if (setGPIOOutputForMs(power_control::powerOutName, 0,
                            forceOffPulseTimeMs) < 0)
     {
 
@@ -1206,6 +1213,7 @@ static void forcePowerOff()
                 "now.");
         }
     });
+    */
 }
 
 static void reset()
