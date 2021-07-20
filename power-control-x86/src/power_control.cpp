@@ -1721,13 +1721,12 @@ static void powerStateTransitionToOff(const Event event)
             phosphor::logging::log<phosphor::logging::level::INFO>("1720");
             gpioAssertTimer.cancel();
             setPowerState(PowerState::off);
-            break;
-
-
+           break;
         case Event::powerOnRequest:
             setPowerState(PowerState::on);
             powerOn();
             phosphor::logging::log<phosphor::logging::level::INFO>("1730");
+            break;
         default:
             //setPowerState(PowerState::on);
             phosphor::logging::log<phosphor::logging::level::INFO>(
