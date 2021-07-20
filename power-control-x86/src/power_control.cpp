@@ -344,36 +344,47 @@ static std::function<void(const Event)> getPowerStateHandler(PowerState state)
     switch (state)
     {
         case PowerState::on:
+        phosphor::logging::log<phosphor::logging::level::INFO>("347");
             return powerStateOn;
             break;
         case PowerState::waitForPSPowerOK:
+        phosphor::logging::log<phosphor::logging::level::INFO>("351");
             return powerStateWaitForPSPowerOK;
             break;
         case PowerState::waitForSIOPowerGood:
+        phosphor::logging::log<phosphor::logging::level::INFO>("355");
             return powerStateWaitForSIOPowerGood;
             break;
         case PowerState::off:
+        phosphor::logging::log<phosphor::logging::level::INFO>("359");
             return powerStateOff;
             break;
         case PowerState::transitionToOff:
+        phosphor::logging::log<phosphor::logging::level::INFO>("363");
             return powerStateTransitionToOff;
             break;
         case PowerState::gracefulTransitionToOff:
+        phosphor::logging::log<phosphor::logging::level::INFO>("367");
             return powerStateGracefulTransitionToOff;
             break;
         case PowerState::cycleOff:
+        phosphor::logging::log<phosphor::logging::level::INFO>("371");
             return powerStateCycleOff;
             break;
         case PowerState::transitionToCycleOff:
+        phosphor::logging::log<phosphor::logging::level::INFO>("375");
             return powerStateTransitionToCycleOff;
             break;
         case PowerState::gracefulTransitionToCycleOff:
+        phosphor::logging::log<phosphor::logging::level::INFO>("379");
             return powerStateGracefulTransitionToCycleOff;
             break;
         case PowerState::checkForWarmReset:
+        phosphor::logging::log<phosphor::logging::level::INFO>("383");
             return powerStateCheckForWarmReset;
             break;
         default:
+        phosphor::logging::log<phosphor::logging::level::INFO>("387");
             return nullptr;
             break;
     }
@@ -381,6 +392,7 @@ static std::function<void(const Event)> getPowerStateHandler(PowerState state)
 
 static void sendPowerControlEvent(const Event event)
 {
+    phosphor::logging::log<phosphor::logging::level::INFO>("395");
     std::function<void(const Event)> handler = getPowerStateHandler(powerState);
     if (handler == nullptr)
     {
@@ -389,6 +401,7 @@ static void sendPowerControlEvent(const Event event)
         phosphor::logging::log<phosphor::logging::level::INFO>(errMsg.c_str());
         return;
     }
+    phosphor::logging::log<phosphor::logging::level::INFO>("404");
     handler(event);
 }
 
@@ -477,6 +490,7 @@ static void savePowerState(const PowerState state)
 static void setPowerState(const PowerState state)
 {
     powerState = state;
+    phosphor::logging::log<phosphor::logging::level::INFO>("493");
     logStateTransition(state);
 
     hostIface->set_property("CurrentHostState",
@@ -485,7 +499,7 @@ static void setPowerState(const PowerState state)
     chassisIface->set_property("CurrentPowerState",
                                std::string(getChassisState(powerState)));
     chassisIface->set_property("LastStateChangeTime", getCurrentTimeMs());
-
+    phosphor::logging::log<phosphor::logging::level::INFO>("502");
     // Save the power state for the restore policy
     savePowerState(state);
 }
@@ -1704,6 +1718,7 @@ static void powerStateTransitionToOff(const Event event)
     {
         case Event::psPowerOKDeAssert:
             // Cancel any GPIO assertions held during the transition
+            phosphor::logging::log<phosphor::logging::level::INFO>("1720");
             gpioAssertTimer.cancel();
             setPowerState(PowerState::off);
             break;
