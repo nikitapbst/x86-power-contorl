@@ -488,7 +488,7 @@ static void savePowerState(const PowerState state)
     });
 }
 static void setPowerState(const PowerState state)
-{
+{   
     powerState = state;
     phosphor::logging::log<phosphor::logging::level::INFO>("493");
     logStateTransition(state);
@@ -1723,7 +1723,7 @@ static void powerStateTransitionToOff(const Event event)
             setPowerState(PowerState::off);
             break;
         default:
-            setPowerState(PowerState::on);
+            //setPowerState(PowerState::on);
             phosphor::logging::log<phosphor::logging::level::INFO>(
                 "No action 1702 taken.");
             //powerOn();
@@ -2854,8 +2854,8 @@ int main(int argc, char* argv[])
                 sendPowerControlEvent(Event::powerCycleRequest);
                 addRestartCause(RestartCause::command);
             }
-            else
-            {
+            else        
+            {       
                 phosphor::logging::log<phosphor::logging::level::ERR>(
                     "Unrecognized chassis state 2832 transition request.");
                 throw std::invalid_argument("Unrecognized Transition Request");
