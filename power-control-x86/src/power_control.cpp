@@ -1711,6 +1711,7 @@ static void powerStateTransitionToOff(const Event event)
             setPowerState(PowerState::on);
             phosphor::logging::log<phosphor::logging::level::INFO>(
                 "No action 1702 taken.");
+            powerOn();
             break;
     }
 }
