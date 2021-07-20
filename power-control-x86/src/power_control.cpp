@@ -1725,7 +1725,7 @@ static void powerStateTransitionToOff(const Event event)
 
 
         case Event::powerOnRequest:
-            setPowerState(PowerState::on)
+            setPowerState(PowerState::on);
             powerOn();
             phosphor::logging::log<phosphor::logging::level::INFO>("1730");
         default:
