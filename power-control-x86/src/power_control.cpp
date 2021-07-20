@@ -1166,7 +1166,7 @@ static void powerOn()
     std::string logMsg = "1144 powerOn()";
     checkpwrOnOff = true;
     phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
-    setGPIOOutputForMs(power_control::powerOutName, 0, powerPulseTimeMs);
+    setGPIOOutputForMs(power_control::powerOutName, 1, powerPulseTimeMs);
 }
 
 static void gracefulPowerOff()
@@ -1722,6 +1722,12 @@ static void powerStateTransitionToOff(const Event event)
             gpioAssertTimer.cancel();
             setPowerState(PowerState::off);
             break;
+
+
+        case Event::powerOnRequest:
+            setPowerState(PowerState::on)
+            powerOn();
+            phosphor::logging::log<phosphor::logging::level::INFO>("1730");
         default:
             //setPowerState(PowerState::on);
             phosphor::logging::log<phosphor::logging::level::INFO>(
