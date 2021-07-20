@@ -1152,7 +1152,7 @@ static void powerOn()
     std::string logMsg = "1144 powerOn()";
     checkpwrOnOff = true;
     phosphor::logging::log<phosphor::logging::level::INFO>(logMsg.c_str());
-    setGPIOOutputForMs(power_control::powerOutName, 1, powerPulseTimeMs);
+    setGPIOOutputForMs(power_control::powerOutName, 0, powerPulseTimeMs);
 }
 
 static void gracefulPowerOff()
