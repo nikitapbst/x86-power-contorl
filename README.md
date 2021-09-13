@@ -13,7 +13,7 @@ several intentional design goals.
 At this point in time, this daemon targets Lewisburg based, dual socket x86
 server platforms, such as S2600WFT.  It is likely that other platforms will work
 as well.
-
+0
 Because this relies on the hardware passthrough support in the AST2500 to
 function, it requires a few patches to work correctly.
 
